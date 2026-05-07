@@ -9,25 +9,25 @@ pipeline {
         }
         stage('Install npm') {
             steps {
-                sh 'curl -L https://www.npmjs.com/install.sh | sh || true'
-                sh 'export PATH=$HOME/.npm-global/bin:$PATH && npm --version || true'
+                sh '''
+                    curl -fsSL https://registry.npmjs.org/npm/-/npm-10.8.2.tgz | tar -xz
+                    mv package npm-local
+                '''
             }
         }
         stage('Install Dependencies') {
             steps {
                 sh '''
-                    export PATH=$HOME/.npm-global/bin:/usr/local/bin:$PATH
                     cd STROLLReact
-                    npm install
+                    node ../npm-local/bin/npm-cli.js install
                 '''
             }
         }
         stage('Build') {
             steps {
                 sh '''
-                    export PATH=$HOME/.npm-global/bin:/usr/local/bin:$PATH
                     cd STROLLReact
-                    npm run build
+                    node ../npm-local/bin/npm-cli.js run build
                 '''
             }
         }
