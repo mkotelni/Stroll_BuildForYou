@@ -7,14 +7,12 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Install Dependencies') {
+        stage('Check Tools') {
             steps {
-                sh 'cd STROLLReact && npm install'
-            }
-        }
-        stage('Build') {
-            steps {
-                sh 'cd STROLLReact && npm run build'
+                sh 'node --version || echo "NO NODE"'
+                sh 'npm --version || echo "NO NPM"'
+                sh 'which npm || echo "npm not in PATH"'
+                sh 'find /usr -name "npm" 2>/dev/null'
             }
         }
     }
