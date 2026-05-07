@@ -24,12 +24,13 @@ pipeline {
             }
         }
         stage('Build') {
-            steps {
-                sh '''
-                    cd STROLLReact
-                    node ../npm-local/bin/npm-cli.js run build
-                '''
-            }
-        }
+	    steps {
+        	sh '''
+            	cd STROLLReact
+            	node ../npm-local/bin/npm-cli.js install
+	            node ../npm-local/bin/npx-cli.js tsc --noEmit
+        	'''
+    	    }
+	}	
     }
 }
