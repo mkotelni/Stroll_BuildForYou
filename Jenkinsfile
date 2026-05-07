@@ -7,12 +7,28 @@ pipeline {
                 checkout scm
             }
         }
-        stage('Check Tools') {
+        stage('Install npm') {
             steps {
-                sh 'node --version || echo "NO NODE"'
-                sh 'npm --version || echo "NO NPM"'
-                sh 'which npm || echo "npm not in PATH"'
-                sh 'find /usr -name "npm" 2>/dev/null'
+                sh 'curl -L https://www.npmjs.com/install.sh | sh || true'
+                sh 'export PATH=$HOME/.npm-global/bin:$PATH && npm --version || true'
+            }
+        }
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                    export PATH=$HOME/.npm-global/bin:/usr/local/bin:$PATH
+                    cd STROLLReact
+                    npm install
+                '''
+            }
+        }
+        stage('Build') {
+            steps {
+                sh '''
+                    export PATH=$HOME/.npm-global/bin:/usr/local/bin:$PATH
+                    cd STROLLReact
+                    npm run build
+                '''
             }
         }
     }
